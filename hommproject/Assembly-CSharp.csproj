@@ -48,6 +48,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Camera\CombatCamera.cs" />
+     <Compile Include="Assets\Scripts\Combat\BattlefieldGenerator.cs" />
      <Compile Include="Assets\Scripts\Events\CastleEvent.cs" />
      <Compile Include="Assets\Scripts\Events\EventBase.cs" />
      <Compile Include="Assets\Scripts\MasterObject\MasterObject.cs" />

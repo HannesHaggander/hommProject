@@ -5,6 +5,9 @@ public class PlayerMovement : MonoBehaviour {
 
 	private float lerpSpeed = 5f;
 
+	public Vector3 currentTilePosition; //used for combat encoutners
+	public Vector3 previousTilePosition; //used for combat encounters
+
 	public string horizontalInput = "Horizontal";
 	public string vericalInput = "Vertical";
 	public string leftMouse = "leftMouseBtn";
@@ -26,8 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 		newPos = transform.position;
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		horizontalSpeed = Input.GetAxisRaw(horizontalInput);
 		verticalSpeed = Input.GetAxisRaw(vericalInput);
@@ -44,6 +46,7 @@ public class PlayerMovement : MonoBehaviour {
 		MoveToNewPos();
 	}
 
+	// set the location for the entity 
 	void SetNewPos(int x, int y){
 		if(!isTileAvailable(new Vector3(transform.position.x + x, transform.position.y + y, 0))){
 			return;
@@ -56,16 +59,28 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
+	// move the entity towards the new location in fixed update
 	void MoveToNewPos(){
 		if(Vector3.Distance(transform.position, newPos) > 0.05f){
 			transform.position = Vector3.Lerp(transform.position, newPos, lerpSpeed * Time.deltaTime);
-
+			setCombatTiles = true;
 		} else {
+			if(setCombatTiles){
+				SetCurrentAndPreviousTile();
+			}
 			if(pathfindingActive){
 				FindClosestAdjacentToFinal();
 
 			}
 		}
+	}
+
+	private bool setCombatTiles = false;
+	void SetCurrentAndPreviousTile(){
+		setCombatTiles = false;
+		previousTilePosition = currentTilePosition;
+		currentTilePosition = newPos;
+
 	}
 
 
@@ -115,20 +130,24 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
+	// performs a check wether the next move is closer to the final position
 	bool isTileCloser(Vector3 tilepos){
 		return Vector3.Distance(tilepos, finalPos) < Vector3.Distance(tmpTile, finalPos);
 	}
 
+	// performs checks to see if the tile is able to be on
 	bool isTileAvailable(Vector3 endPos){
 		return !Physics.Linecast(transform.position, endPos, layerToStopPathfinding);
 	}
 
+	// initiate the pathfinding sequence
 	void TakeFinalPath(Vector3 newFinalPos){
 		pathfindingActive = true;
 		finalPos = newFinalPos;
 		FindClosestAdjacentToFinal();
 	}
 
+	// get the actual mouse position and move the entity toward the position
 	void GetMouseToFinalPos(){
 		Vector3 rawMousepos = Input.mousePosition;
 		Vector3 mousePos = Camera.main.ScreenToWorldPoint(rawMousepos);
@@ -140,6 +159,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
+	// used for encounters to stop the player from moving
 	public void ForceCancelPathFinding(){
 		pathfindingActive = false;
 	}
