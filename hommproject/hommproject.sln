@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FFD68794-24B3-DEE0-91AB-08A920444AD7}") = "hommproject", "Assembly-CSharp.csproj", "{41B253A5-D8F1-70DD-8991-C0BC37BF0D74}"
+EndProject
+Project("{FFD68794-24B3-DEE0-91AB-08A920444AD7}") = "hommproject", "Assembly-CSharp-Editor-firstpass.csproj", "{9335DAF7-FEBC-86CD-37A0-0C2666161369}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{41B253A5-D8F1-70DD-8991-C0BC37BF0D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B253A5-D8F1-70DD-8991-C0BC37BF0D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B253A5-D8F1-70DD-8991-C0BC37BF0D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B253A5-D8F1-70DD-8991-C0BC37BF0D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9335DAF7-FEBC-86CD-37A0-0C2666161369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9335DAF7-FEBC-86CD-37A0-0C2666161369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9335DAF7-FEBC-86CD-37A0-0C2666161369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9335DAF7-FEBC-86CD-37A0-0C2666161369}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
