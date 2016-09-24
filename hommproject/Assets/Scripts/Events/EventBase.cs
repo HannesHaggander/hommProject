@@ -16,7 +16,7 @@ public class EventBase : MonoBehaviour {
 		if(c.tag.Equals("Player")){
 			if(forcedEvent){
 				myTriggerEvent();
-				c.GetComponent<PlayerMovement>().ForceCancelPathFinding();
+				c.GetComponent<PlayerMovement>().GetComponent<AStarPathfinding>().ForceCancelPathFinding();
 			}
 		}
 	}

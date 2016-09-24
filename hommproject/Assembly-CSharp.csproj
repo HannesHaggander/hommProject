@@ -53,8 +53,10 @@
      <Compile Include="Assets\Scripts\Events\CastleEvent.cs" />
      <Compile Include="Assets\Scripts\Events\EventBase.cs" />
      <Compile Include="Assets\Scripts\MasterObject\MasterObject.cs" />
+     <Compile Include="Assets\Scripts\Movement\AStarPathfinding.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerEventBehaviour.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\Units\AttributesBase.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
