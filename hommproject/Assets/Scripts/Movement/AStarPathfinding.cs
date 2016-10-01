@@ -234,6 +234,7 @@ public class AStarPathfinding : MonoBehaviour {
 
 	LineRenderer lr = null;
 	GameObject holderNewLinerenderer = null;
+	
 	public void printPath(ArrayList posList){
 		if(posList == null){ print("list is null"); return;}
 		

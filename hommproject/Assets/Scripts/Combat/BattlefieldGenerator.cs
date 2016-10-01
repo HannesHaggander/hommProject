@@ -17,11 +17,13 @@ public class BattlefieldGenerator : MonoBehaviour {
 	public GameObject SpawnPlacement = null;
 	public ArrayList heroSpawnpoints = new ArrayList(5);
 	public ArrayList enemySpawnpoints = new ArrayList(5);
+	public ArrayList instantiatedList = new ArrayList(); 
 
 	void Start(){
 		MasterObject.me.setIsGenerationComplete(false);
 		leftTileType = "Desert";
 		rightTileType = "Forest";
+		
 
 		TilesLeft = LoadGameObjectList(basePath + leftTileType);
 		TilesRight = LoadGameObjectList(basePath + rightTileType);
@@ -29,24 +31,41 @@ public class BattlefieldGenerator : MonoBehaviour {
 		GenerateHalf("left", TilesLeft);
 		GenerateHalf("Right", TilesRight);
 		SpawnHeroUnits(MasterObject.me.getHeroArmy());
-		SpawnEnemyUnits(MasterObject.me.getEnmyArmy());
+		SpawnEnemyUnits(MasterObject.me.getEnemyArmy());
 
 		MasterObject.me.setIsGenerationComplete(true);
+		SpawnCombatManager();
+	}
+
+	private void SpawnCombatManager(){
+		GameObject combatManager = new GameObject();
+		CombatManager cm = combatManager.AddComponent<CombatManager>();
+		combatManager.name = "CombatManager";
+		combatManager.tag = "CombatManager";
+		cm.SetTurnList(instantiatedList);
 	}
 
 	public GameObject HeroUnitTest;
 	void SpawnHeroUnits(GameObject[] heroArmy){
-		heroArmy = new GameObject[5]{HeroUnitTest, HeroUnitTest, HeroUnitTest, HeroUnitTest, HeroUnitTest};
 		for(int i = 0; i < heroArmy.Length; i++){
-			Instantiate(heroArmy[i], (Vector3) heroSpawnpoints[i], Quaternion.identity);
+			if(heroArmy[i] != null){
+				GameObject spawnedUnit = Instantiate(heroArmy[i], (Vector3) heroSpawnpoints[i], Quaternion.identity) as GameObject;
+				spawnedUnit.name = "hero_unit_ " + i.ToString();
+				spawnedUnit.GetComponent<AttributesBase>().combatId = i;
+				instantiatedList.Add(spawnedUnit);
+			}
 		}
 	}
 
 	public GameObject EnemyUnitTest;
 	void SpawnEnemyUnits(GameObject[] enemyArmy){
-		enemyArmy = new GameObject[5]{EnemyUnitTest,EnemyUnitTest,EnemyUnitTest,EnemyUnitTest,EnemyUnitTest};
 		for(int i = 0; i < enemyArmy.Length; i++){
-			Instantiate(enemyArmy[i], (Vector3) enemySpawnpoints[i], Quaternion.identity);
+			if(enemyArmy[i] != null){
+				GameObject spawnedUnit = Instantiate(enemyArmy[i], (Vector3) enemySpawnpoints[i], Quaternion.identity) as GameObject;
+				spawnedUnit.name = "enemy_unit_ " + i.ToString();
+				spawnedUnit.GetComponent<AttributesBase>().combatId = i + 10;
+				instantiatedList.Add(spawnedUnit);
+			}
 		}
 	}
 
