@@ -6,6 +6,7 @@ public class AStarPathfinding : MonoBehaviour {
 	
 	public bool pathfindingActive = false;
 
+	public bool noPathAvailable = false;
 	private float lerpSpeed = 5f;
 
 	public Vector3 currentTilePosition; //used for combat encoutners
@@ -58,8 +59,21 @@ public class AStarPathfinding : MonoBehaviour {
 	void SetCurrentAndPreviousTile(){
 		setCombatTiles = false;
 		previousTilePosition = currentTilePosition;
-		currentTilePosition = newPos;
-		attemptedWalkedTiles.Add(previousTilePosition);
+		currentTilePosition = dummyObj.transform.position;
+		if(!attemptedWalkedTiles.Contains(previousTilePosition)){
+			print("Adding " + previousTilePosition + " to attempted walked tiles");
+			attemptedWalkedTiles.Add(previousTilePosition);
+		} 
+		else {
+			print("attempted walk tiles already has " + previousTilePosition + " error");
+		}
+		if(!attemptedWalkedTiles.Contains(currentTilePosition)){
+			attemptedWalkedTiles.Add(currentTilePosition);
+		} 
+		else {
+			print("current tile position is already in list: " + currentTilePosition);
+		}
+		
 	}
 
 
@@ -70,10 +84,9 @@ public class AStarPathfinding : MonoBehaviour {
 	void FindClosestAdjacentToFinal(GameObject fromObj){
 		if(BlockedNodes.Capacity > 64){
 			print("blocked nodes had 500 blocked nodes, returning");
-			BlockedNodes.Clear();
-			BlockedNodes = new ArrayList();
 			return;
 		}
+
 		if(Vector3.Distance(fromObj.transform.position, finalPos) > 0.05f){
 			Vector3 up = fromObj.transform.position + Vector3.up;
 			Vector3 right = fromObj.transform.position + Vector3.right;
@@ -91,19 +104,27 @@ public class AStarPathfinding : MonoBehaviour {
 			tmpTile = CheckTile(left);
 			//check best tile
 			SetCurrentAndPreviousTile();
+
 			if(tmpTile == fromObj.transform.position){
 				if(!BlockedNodes.Contains(tmpTile)){
 					BlockedNodes.Add(tmpTile);
 				}
+				if(entirePath.Count == 0){
+					noPathAvailable = true;
+				}
+				entirePath.Clear();
+				attemptedWalkedTiles.Clear();
 				fromObj.transform.position = transform.position; // reset the dummy and block the tile that caused the reset
 			} else {
 				if(!entirePath.Contains(tmpTile)){
 					entirePath.Add(tmpTile);
 				}
+				
+				currentBestPosition = new Vector3(0,0,-10000);
 				dummyObj.transform.position = tmpTile;	
 			}
 
-			FindClosestAdjacentToFinal(fromObj);
+			//FindClosestAdjacentToFinal(fromObj);
 		
 		} else {
 			// if the player is at the final position then do nothing
@@ -162,7 +183,12 @@ public class AStarPathfinding : MonoBehaviour {
 	void TakeFinalPath(Vector3 newFinalPos){
 		pathfindingActive = true;
 		finalPos = newFinalPos;
-		FindClosestAdjacentToFinal(dummyObj);
+		// remove recursive function and loop this function instead.
+		while(!entirePath.Contains(finalPos)){
+			FindClosestAdjacentToFinal(dummyObj);
+			if(noPathAvailable){ break; }
+		}
+		noPathAvailable = false;
 	}
 
 	// get the actual mouse position and move the entity toward the position
@@ -189,6 +215,9 @@ public class AStarPathfinding : MonoBehaviour {
 		attemptedWalkedTiles = new ArrayList();
 		BlockedNodes.Clear();
 		BlockedNodes = new ArrayList();
+		entirePath.Clear();
+		entirePath = new ArrayList();
+		
 		if(dummyObj == null){
 			dummyObj = new GameObject();
 			Rigidbody dummyRB =  dummyObj.AddComponent<Rigidbody>();
@@ -197,11 +226,8 @@ public class AStarPathfinding : MonoBehaviour {
 		} 
 		dummyObj.transform.position = transform.position;
 		dummyObj.name = "dummy";
-		if(!BlockedNodes.Contains(transform.position)){
-			BlockedNodes.Add(transform.position); // block the initial tile
-		}
-		entirePath.Clear();
-		entirePath = new ArrayList();
+		BlockedNodes.Add(transform.position); // block the initial tile
+		
 		GetMouseToFinalPos();
 		return entirePath;
 	}
