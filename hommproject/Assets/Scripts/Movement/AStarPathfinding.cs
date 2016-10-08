@@ -229,6 +229,8 @@ public class AStarPathfinding : MonoBehaviour {
 		if(Physics.OverlapBox(pathfindTo, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, layerToStopPathfinding).Length > 0){
 			return null;
 		}
+		currentTilePosition = new Vector3(0,0,-1000);
+		previousTilePosition = new Vector3(0,0,-1000);
 		return entirePath;
 	}
 

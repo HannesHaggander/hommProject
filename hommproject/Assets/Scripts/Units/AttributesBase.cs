@@ -149,15 +149,15 @@ public class AttributesBase : MonoBehaviour {
 		for(int x = -1; x <= 1; x++){
 			for(int y = -1; y <= 1; y++){
 				if(!(x == 0 && y == 0)){ // self pos
-					print("checking x: " + (targetpos.x + x) + " y: " + (targetpos.y + y));
+					//print("checking x: " + (targetpos.x + x) + " y: " + (targetpos.y + y));
 
-					Collider[] cols = Physics.OverlapBox(MasterObject.me.Correctmousepos(), 
-														new Vector3(0.5f,0.5f,0.5f), 
+					Vector3 testDistanceVector = new Vector3(targetpos.x + x, targetpos.y + y, 0);
+					Collider[] cols = Physics.OverlapBox(testDistanceVector, 
+														new Vector3(0.1f,0.1f,0.1f), 
 														Quaternion.identity, 
 														1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Units"));
 					if(cols.Length == 0){
-						Vector3 testDistanceVector = new Vector3(targetpos.x + x, targetpos.y + y, 0);
-						targetDistance = Vector3.Distance(transform.position, testDistanceVector);
+						targetDistance = Mathf.Round(Vector3.Distance(transform.position, testDistanceVector));
 						if(targetDistance < minDistance){
 							minDistance = targetDistance;
 							result = testDistanceVector;
