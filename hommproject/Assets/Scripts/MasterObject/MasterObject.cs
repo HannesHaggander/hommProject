@@ -93,4 +93,13 @@ public class MasterObject : MonoBehaviour {
 
         GameObject.FindGameObjectWithTag("CombatManager").GetComponent<CombatManager>().isBattleOver(heroArmyDead, enemyArmyDead);
     }
+
+    public Vector3 Correctmousepos(){
+        Vector3 rawMousepos = Input.mousePosition;
+		Vector3 mousePos = Camera.main.ScreenToWorldPoint(rawMousepos);
+		mousePos.x = Mathf.RoundToInt(mousePos.x);
+		mousePos.y = Mathf.RoundToInt(mousePos.y);
+		mousePos.z = 0;
+        return mousePos;
+    }
 }

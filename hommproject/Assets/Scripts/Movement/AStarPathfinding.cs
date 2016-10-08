@@ -61,17 +61,17 @@ public class AStarPathfinding : MonoBehaviour {
 		previousTilePosition = currentTilePosition;
 		currentTilePosition = dummyObj.transform.position;
 		if(!attemptedWalkedTiles.Contains(previousTilePosition)){
-			print("Adding " + previousTilePosition + " to attempted walked tiles");
+			//print("Adding " + previousTilePosition + " to attempted walked tiles");
 			attemptedWalkedTiles.Add(previousTilePosition);
 		} 
 		else {
-			print("attempted walk tiles already has " + previousTilePosition + " error");
+			//print("attempted walk tiles already has " + previousTilePosition + " error");
 		}
 		if(!attemptedWalkedTiles.Contains(currentTilePosition)){
 			attemptedWalkedTiles.Add(currentTilePosition);
 		} 
 		else {
-			print("current tile position is already in list: " + currentTilePosition);
+			//print("current tile position is already in list: " + currentTilePosition);
 		}
 		
 	}
@@ -160,18 +160,18 @@ public class AStarPathfinding : MonoBehaviour {
 	// performs checks to see if the tile is able to be on
 	bool isTileAvailable(Vector3 endPos){
 		if(Physics.Linecast(dummyObj.transform.position, endPos, layerToStopPathfinding)){
-			print("not available because of linecast: " + endPos);
+			//print("not available because of linecast: " + endPos);
 			return false;
 		}
 		
 		if(BlockedNodes.Contains(endPos)){
-			print("Not available because of " + endPos + " is in blocked tiles");
+			//print("Not available because of " + endPos + " is in blocked tiles");
 			return false;
 		} // cant go to previously blocked nodes
 	
 		
 		if(attemptedWalkedTiles.Contains(endPos)){
-			print("not available because of " + endPos + " is walked on already");
+			//print("not available because of " + endPos + " is walked on already");
 			return false;
 		}
 
@@ -192,25 +192,21 @@ public class AStarPathfinding : MonoBehaviour {
 	}
 
 	// get the actual mouse position and move the entity toward the position
-	public void GetMouseToFinalPos(){
-		Vector3 rawMousepos = Input.mousePosition;
-		Vector3 mousePos = Camera.main.ScreenToWorldPoint(rawMousepos);
-		mousePos.x = Mathf.RoundToInt(mousePos.x);
-		mousePos.y = Mathf.RoundToInt(mousePos.y);
-		mousePos.z = 0;
+	/*public void GetMouseToFinalPos(){
+		Vector3 mousePos = MasterObject.me.Correctmousepos();
 		if(Physics.OverlapBox(mousePos, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, layerToStopPathfinding).Length > 0){
 			return;
 		}
 		
 		TakeFinalPath(mousePos);
-	}
+	}*/
 
 	// used for encounters to stop the player from moving
 	public void ForceCancelPathFinding(){
 		pathfindingActive = false;
 	}
 
-	public ArrayList CalculateEntirePath(){
+	public ArrayList CalculateEntirePath(Vector3 pathfindTo){
 		attemptedWalkedTiles.Clear();
 		attemptedWalkedTiles = new ArrayList();
 		BlockedNodes.Clear();
@@ -228,7 +224,11 @@ public class AStarPathfinding : MonoBehaviour {
 		dummyObj.name = "dummy";
 		BlockedNodes.Add(transform.position); // block the initial tile
 		
-		GetMouseToFinalPos();
+		//GetMouseToFinalPos();
+		TakeFinalPath(pathfindTo);
+		if(Physics.OverlapBox(pathfindTo, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, layerToStopPathfinding).Length > 0){
+			return null;
+		}
 		return entirePath;
 	}
 

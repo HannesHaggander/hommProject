@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 		horizontalSpeed = Input.GetAxisRaw(horizontalInput);
 		verticalSpeed = Input.GetAxisRaw(vericalInput);
 		if(Input.GetMouseButtonDown(0)){
-			path = pathfinding.CalculateEntirePath();
+			path = pathfinding.CalculateEntirePath(MasterObject.me.Correctmousepos());
 			pathfinding.printPath(path);
 		}		
 	}
