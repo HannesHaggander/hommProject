@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class MasterObject : MonoBehaviour {
     public static MasterObject me = null;
 
+    public Hashtable map_towns = new Hashtable();
+
     public GameObject goodUnit;
     public GameObject evilUnit;
 
@@ -101,5 +103,23 @@ public class MasterObject : MonoBehaviour {
 		mousePos.y = Mathf.RoundToInt(mousePos.y);
 		mousePos.z = 0;
         return mousePos;
+    }
+
+    public void RegisterTown(string townName, string sceneName){
+        print("register town: " + townName + " load scene: " + sceneName);
+        map_towns.Add(townName, sceneName);
+    }
+
+    public string getTown(string townName){
+        return (string) map_towns[townName];
+    }
+
+    public void loadTown(string townName){
+        if(map_towns.Contains(townName)){
+            SceneManager.LoadScene((string) map_towns[townName]);
+        }
+        else {
+            print("missing scene: " + townName + "...");
+        }
     }
 }
