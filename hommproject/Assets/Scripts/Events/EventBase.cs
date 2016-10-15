@@ -14,6 +14,7 @@ public class EventBase : MonoBehaviour {
 	public void OnTriggerEnter(Collider c){
 		inCollider = c.gameObject;
 		if(c.tag.Equals("Player")){
+			print("player entered");
 			if(forcedEvent){
 				myTriggerEvent();
 				c.GetComponent<PlayerMovement>().GetComponent<AStarPathfinding>().ForceCancelPathFinding();
@@ -24,7 +25,7 @@ public class EventBase : MonoBehaviour {
 	public void OnTriggerExit(Collider c){
 		inCollider = null;
 		if(c.tag.Equals("Player")){
-			
+			print("player exit");
 		}
 	}
 }

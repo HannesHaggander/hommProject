@@ -3,14 +3,11 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
-	public string horizontalInput = "Horizontal";
-	public string vericalInput = "Vertical";
-
 	public string pathInputTrigger = "leftMouseBtn"; //pathfinding key
 
-	private float horizontalSpeed = 0;
-	private float verticalSpeed = 0;
+	public float movementSpeed = 10;
 	private bool leftmouseDown = false;
+	private bool followPath = false;
 
 	private AStarPathfinding pathfinding = null;
 	private ArrayList path = new ArrayList();
@@ -18,23 +15,44 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if(pathfinding == null){ pathfinding = gameObject.GetComponent<AStarPathfinding>(); }
-
-		pathfinding.newPos = transform.position;
 	}
 
 	void Update () {
-		horizontalSpeed = Input.GetAxisRaw(horizontalInput);
-		verticalSpeed = Input.GetAxisRaw(vericalInput);
-		if(Input.GetMouseButtonDown(0)){
+		if(Input.GetMouseButtonDown(0) && !followPath){
+			travelCounter = 0;
 			path = pathfinding.CalculateEntirePath(MasterObject.me.Correctmousepos());
-			pathfinding.printPath(path);
+			pathfinding.printPath(path);			
 		}		
-	}
 
-	void MoveToNextPosInPath(){
-		
+		if(Input.GetKeyDown(KeyCode.E)){
+			print("moving");
+			followPath = true;
+		}
 	}
 
 	void FixedUpdate(){
+		if(followPath){
+			TravelPath();
+		}
+	}
+
+	private int travelCounter = -1;
+	private void TravelPath(){
+		if(path != null && path.Count > 0 && travelCounter >= 0 && travelCounter <= path.Count-1){
+			//transform.position = (Vector3) path[travelCounter];
+			if(Vector3.Distance(transform.position, (Vector3) path[travelCounter]) < 0.1f){
+				transform.position = (Vector3) path[travelCounter];
+				travelCounter++;
+			}
+			else {
+				transform.position = Vector3.Lerp(transform.position, (Vector3) path[travelCounter], movementSpeed * Time.deltaTime);
+			}
+
+		}
+		else {
+			print("path: " + (path == null ? "null" : "set | ") 
+					+ " travel counter: " + travelCounter);
+			followPath = false;
+		}
 	}
 }

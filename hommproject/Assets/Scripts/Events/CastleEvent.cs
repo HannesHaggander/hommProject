@@ -13,7 +13,7 @@ public class CastleEvent : EventBase {
 
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButtonDown("Jump") && base.inCollider.tag.Equals("Player")){
+		if(Input.GetButtonDown("Jump") && base.inCollider != null && base.inCollider.tag.Equals("Player")){
 			myTriggerEvent();
 		}
 	}
