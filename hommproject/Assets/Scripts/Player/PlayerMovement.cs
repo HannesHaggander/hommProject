@@ -37,6 +37,9 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	private int travelCounter = -1;
+	/* Lerping through the path and setting the final position to ensure it's
+	in the exact spot
+	*/
 	private void TravelPath(){
 		if(path != null && path.Count > 0 && travelCounter >= 0 && travelCounter <= path.Count-1){
 			//transform.position = (Vector3) path[travelCounter];
