@@ -21,8 +21,8 @@ public class PlayerMovement : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0) && !followPath){
 			travelCounter = 0;
 			path = pathfinding.CalculateEntirePath(MasterObject.me.Correctmousepos());
-			pathfinding.printPath(path);			
-		}		
+			pathfinding.printPath(path);
+		}
 
 		if(Input.GetKeyDown(KeyCode.E)){
 			print("moving");
@@ -37,6 +37,9 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	private int travelCounter = -1;
+	/* Lerping through the path and setting the final position to ensure it's
+	in the exact spot
+	*/
 	private void TravelPath(){
 		if(path != null && path.Count > 0 && travelCounter >= 0 && travelCounter <= path.Count-1){
 			//transform.position = (Vector3) path[travelCounter];
@@ -50,7 +53,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		}
 		else {
-			print("path: " + (path == null ? "null" : "set | ") 
+			print("path: " + (path == null ? "null" : "set | ")
 					+ " travel counter: " + travelCounter);
 			followPath = false;
 		}
