@@ -13,6 +13,12 @@ public class MasterObject : MonoBehaviour {
     public GameObject[] heroArmy = new GameObject[5];
     public GameObject[] enemyArmy = new GameObject[5];
 
+    void OnLevelWasLoaded(int level){
+        if(level == 0){
+            GetPlayers();
+        }
+    }
+
 	void Awake () {
         // makes sure that there only is one instance of the master object
 	    if(me == null)
@@ -105,6 +111,10 @@ public class MasterObject : MonoBehaviour {
         return mousePos;
     }
 
+    public bool isTownRegistered(string townName){
+        return map_towns.Contains(townName);
+    }
+
     public void RegisterTown(string townName, string sceneName){
         print("register town: " + townName + " load scene: " + sceneName);
         map_towns.Add(townName, sceneName);
@@ -116,10 +126,39 @@ public class MasterObject : MonoBehaviour {
 
     public void loadTown(string townName){
         if(map_towns.Contains(townName)){
+            SavePlayers();
             SceneManager.LoadScene((string) map_towns[townName]);
         }
         else {
             print("missing scene: " + townName + "...");
         }
+    }
+
+    Hashtable playerPositions = new Hashtable();
+    public void SavePlayers(){
+        print("saving players");
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        SavePlayerPosition(allPlayers);
+    }
+    
+    public void SavePlayerPosition(GameObject[] players){
+        if(players.Length > 0){
+            foreach(GameObject g in players){
+                playerPositions.Add(g.transform.name, g.transform.position);
+            }
+        }
+    }
+
+    public void GetPlayers(){
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        if(allPlayers == null){
+            print("All players is null");
+            return; 
+        }
+        foreach(GameObject player in allPlayers){
+            if(playerPositions.Contains(player.transform.name)){
+                player.transform.position = (Vector3) playerPositions[player.transform.name];
+            }
+        }        
     }
 }

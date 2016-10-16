@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Resources/Scenes/combatevent.unity
+- path: Assets/Resources/Scenes/overworld.unity
   isLoaded: 1
   isActive: 1

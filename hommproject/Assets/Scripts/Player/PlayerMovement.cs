@@ -21,8 +21,8 @@ public class PlayerMovement : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0) && !followPath){
 			travelCounter = 0;
 			path = pathfinding.CalculateEntirePath(MasterObject.me.Correctmousepos());
-			pathfinding.printPath(path);			
-		}		
+			pathfinding.printPath(path);
+		}
 
 		if(Input.GetKeyDown(KeyCode.E)){
 			print("moving");
@@ -50,8 +50,6 @@ public class PlayerMovement : MonoBehaviour {
 
 		}
 		else {
-			print("path: " + (path == null ? "null" : "set | ") 
-					+ " travel counter: " + travelCounter);
 			followPath = false;
 		}
 	}

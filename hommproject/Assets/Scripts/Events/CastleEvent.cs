@@ -10,8 +10,9 @@ public class CastleEvent : EventBase {
 
 	void Start(){
 		base.forcedEvent = false;	
-		print("register town " + transform.name);
-		MasterObject.me.RegisterTown(transform.name, "townscreen");	
+		if(!MasterObject.me.isTownRegistered(transform.name)){
+			MasterObject.me.RegisterTown(transform.name, "townscreen");	
+		}
 	}
 
 	public override void myTriggerEvent(){
