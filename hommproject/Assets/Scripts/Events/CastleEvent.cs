@@ -17,12 +17,15 @@ public class CastleEvent : EventBase {
 
 	public override void myTriggerEvent(){
 		ownedBy = base.inCollider.transform.root.name;
+		MasterObject.SaveState.SaveData();
 		MasterObject.me.loadTown(transform.name);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButtonDown("Jump") && base.inCollider != null && base.inCollider.tag.Equals("Player")){
+		if(Input.GetButtonDown("Jump") 
+				&& base.inCollider != null 
+				&& base.allowedTags.Contains(base.inCollider.tag)){ //base.inCollider.tag.Equals("Player")){
 			myTriggerEvent();
 		}
 	}

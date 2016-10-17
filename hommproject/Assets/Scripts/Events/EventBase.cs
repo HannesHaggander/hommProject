@@ -6,6 +6,12 @@ public class EventBase : MonoBehaviour {
 	public bool forcedEvent = false;
 	[SerializeField]
 	protected GameObject inCollider = null;
+	
+	public ArrayList allowedTags = null;
+
+	void Awake(){
+		allowedTags = new ArrayList(){"Player", "Hero", "Self"};
+	}
 
 	public virtual void myTriggerEvent(){
 		print("Should be overwritten by some other function");
@@ -13,7 +19,7 @@ public class EventBase : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider c){
 		inCollider = c.gameObject;
-		if(c.tag.Equals("Player")){
+		if(allowedTags.Contains(c.tag)){
 			print("player entered");
 			if(forcedEvent){
 				myTriggerEvent();
@@ -24,7 +30,7 @@ public class EventBase : MonoBehaviour {
 
 	public void OnTriggerExit(Collider c){
 		inCollider = null;
-		if(c.tag.Equals("Player")){
+		if(allowedTags.Contains(c.tag)){
 			print("player exit");
 		}
 	}

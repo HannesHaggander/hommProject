@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
+using System.IO;
 
+[RequireComponent (typeof(SaveState))]
 public class MasterObject : MonoBehaviour {
     public static MasterObject me = null;
-
+    public static SaveState SaveState = null;
     public Hashtable map_towns = new Hashtable();
 
     public GameObject goodUnit;
@@ -14,8 +17,29 @@ public class MasterObject : MonoBehaviour {
     public GameObject[] enemyArmy = new GameObject[5];
 
     void OnLevelWasLoaded(int level){
-        if(level == 0){
-            GetPlayers();
+        if(level == 0 && SaveState != null){
+            if(File.Exists(Application.persistentDataPath + "/gameinfo.dat")){
+                GameData savedGameData = SaveState.LoadData();
+                ArrayList savedEntries = GetAllEntities();
+                int i = 0;
+                foreach(object o in savedEntries){
+                    if(savedGameData.entityPositionsX.Contains(((GameObject) savedEntries[i]).transform.name)){
+                        GameObject g = (GameObject) o;
+                        Vector3 v3 = new Vector3((float) savedGameData.entityPositionsX[savedEntries[i]], 
+                                                            (float) savedGameData.entityPositionsY[savedEntries[i]], 
+                                                            0);
+                        print("found: " + v3);
+                        g.transform.position = v3;
+                    }
+                    else {
+                        print("saved data did not contain '" + ((GameObject) savedEntries[i]).transform.name + "'");
+                    }
+                    i++;
+                }
+            }
+            else {
+                print("file does not exist");
+            }
         }
     }
 
@@ -24,6 +48,7 @@ public class MasterObject : MonoBehaviour {
 	    if(me == null)
         {
             me = this;
+            SaveState = GetComponent<SaveState>();
             DontDestroyOnLoad(gameObject);
         } else if(me != this)
         {
@@ -126,39 +151,40 @@ public class MasterObject : MonoBehaviour {
 
     public void loadTown(string townName){
         if(map_towns.Contains(townName)){
-            SavePlayers();
             SceneManager.LoadScene((string) map_towns[townName]);
         }
         else {
             print("missing scene: " + townName + "...");
         }
     }
-
-    Hashtable playerPositions = new Hashtable();
-    public void SavePlayers(){
-        print("saving players");
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
-        SavePlayerPosition(allPlayers);
-    }
     
-    public void SavePlayerPosition(GameObject[] players){
-        if(players.Length > 0){
-            foreach(GameObject g in players){
-                playerPositions.Add(g.transform.name, g.transform.position);
-            }
-        }
-    }
-
-    public void GetPlayers(){
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
-        if(allPlayers == null){
-            print("All players is null");
-            return; 
-        }
-        foreach(GameObject player in allPlayers){
-            if(playerPositions.Contains(player.transform.name)){
-                player.transform.position = (Vector3) playerPositions[player.transform.name];
-            }
+    public ArrayList allEntities = new ArrayList();
+    public void RegisterEntity(GameObject entity){
+        if(!allEntities.Contains(entity)){
+            allEntities.Add(entity);
         }        
+    }    
+
+    public ArrayList GetAllEntities(){
+        print("<<<CHANGE THIS LATER; REGISTER ALL ENTITIES ON SPAWN>>>");
+        ArrayList entities = new ArrayList();
+		GameObject[] playerPos = GameObject.FindGameObjectsWithTag("Hero");
+		GameObject[] entityPos = GameObject.FindGameObjectsWithTag("Entity");
+
+		if(playerPos.Length > 0){
+			foreach(GameObject g in playerPos){
+				print("Added Hero: '" + g.transform.name + "'");
+				entities.Add(g);
+			}	
+		}
+
+		if(entityPos.Length > 0){
+			foreach(GameObject g in entityPos){
+				print("Added Entity: " + g.transform.name);
+				entities.Add(g);
+			}
+		}
+
+		return entities;
     }
 }
