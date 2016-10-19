@@ -7,7 +7,7 @@ using System.IO;
 [RequireComponent (typeof(SaveState))]
 public class MasterObject : MonoBehaviour {
     public static MasterObject me = null;
-    public static SaveState SaveState = null;
+    public static SaveState saveState = null;
     public Hashtable map_towns = new Hashtable();
 
     public GameObject goodUnit;
@@ -17,29 +17,8 @@ public class MasterObject : MonoBehaviour {
     public GameObject[] enemyArmy = new GameObject[5];
 
     void OnLevelWasLoaded(int level){
-        if(level == 0 && SaveState != null){
-            if(File.Exists(Application.persistentDataPath + "/gameinfo.dat")){
-                GameData savedGameData = SaveState.LoadData();
-                ArrayList savedEntries = GetAllEntities();
-                int i = 0;
-                foreach(object o in savedEntries){
-                    if(savedGameData.entityPositionsX.Contains(((GameObject) savedEntries[i]).transform.name)){
-                        GameObject g = (GameObject) o;
-                        Vector3 v3 = new Vector3((float) savedGameData.entityPositionsX[savedEntries[i]], 
-                                                            (float) savedGameData.entityPositionsY[savedEntries[i]], 
-                                                            0);
-                        print("found: " + v3);
-                        g.transform.position = v3;
-                    }
-                    else {
-                        print("saved data did not contain '" + ((GameObject) savedEntries[i]).transform.name + "'");
-                    }
-                    i++;
-                }
-            }
-            else {
-                print("file does not exist");
-            }
+        if(level == 0){
+            SetEntitiesLoadedPositions();
         }
     }
 
@@ -48,7 +27,7 @@ public class MasterObject : MonoBehaviour {
 	    if(me == null)
         {
             me = this;
-            SaveState = GetComponent<SaveState>();
+            saveState = GetComponent<SaveState>();
             DontDestroyOnLoad(gameObject);
         } else if(me != this)
         {
@@ -150,6 +129,7 @@ public class MasterObject : MonoBehaviour {
     }
 
     public void loadTown(string townName){
+        saveState.SaveTmp();
         if(map_towns.Contains(townName)){
             SceneManager.LoadScene((string) map_towns[townName]);
         }
@@ -186,5 +166,20 @@ public class MasterObject : MonoBehaviour {
 		}
 
 		return entities;
+    }
+
+    public void SetEntitiesLoadedPositions(){
+        
+        Debug.Log("getting pos\n==============");
+        GameData tmpLoadedData = saveState.LoadTmpSave();
+        if(tmpLoadedData != null){
+            foreach(GameObject g in tmpLoadedData.getEntities()){
+                LocalPrint(g.ToString());
+            }
+        }
+    }
+
+    private void LocalPrint(string s){
+        Debug.Log("MasterObject :: " + s);
     }
 }

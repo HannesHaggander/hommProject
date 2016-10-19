@@ -17,7 +17,6 @@ public class CastleEvent : EventBase {
 
 	public override void myTriggerEvent(){
 		ownedBy = base.inCollider.transform.root.name;
-		MasterObject.SaveState.SaveData();
 		MasterObject.me.loadTown(transform.name);
 	}
 
