@@ -1,0 +1,41 @@
+* First ideas
+** Type
+   - Necromancers
+   - Elementals
+   - Holy
+   - Goblins and orcs
+   - Demons
+   - Artifacts inventions
+
+** Playstyles
+   - Swarming
+   - Big baddies
+   - Stealthy/sneaky
+   - Striking fast
+   - Ranged combat
+   - Hero focused
+   - Influencing
+
+** Strengths
+   - Good Early/Mid/Late game
+   - Fast ramping
+   - Slow growing
+   - Fast breeding
+
+* Necromancers
+Necromancers, growing an army slowly from the defeated. The risen can't be to strong. Strength in numbers. 
+
+* Demons
+Demons, big strong using fire. Very tanky but costly units.
+
+* Elementals
+Elementals, wizards, shamans or druids using the environment. Creating an army from the elements that are volatile does not last long.
+
+* Holy
+Humans trying to get help from the gods. The more conquered the more devotion and gets more help. By taking more strongholds and resources the better units get.
+
+* Artifacts and inventions
+Artificers, humans creating weapons and tools from different resources. Not very tanky, glasscanon.
+
+* Goblins and orcs
+Goblins really fast breeding and swarming enemies,
